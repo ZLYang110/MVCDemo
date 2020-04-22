@@ -7,25 +7,37 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrConfig;
+import com.r0adkll.slidr.model.SlidrPosition;
 import com.trello.rxlifecycle3.components.support.RxAppCompatActivity;
 import com.zlyandroid.mvcdemo.R;
+import com.zlyandroid.mvcdemo.app.ProApplication;
 import com.zlyandroid.mvcdemo.interfaces.ActivityPresenter;
 import com.zlyandroid.mvcdemo.manager.SystemBarTintManager;
 import com.zlyandroid.mvcdemo.manager.ThreadManager;
+import com.zlyandroid.mvcdemo.ui.activity.ThemeActivity;
 import com.zlyandroid.mvcdemo.util.DialogUtils;
+import com.zlyandroid.mvcdemo.util.DimmenUtils;
 import com.zlyandroid.mvcdemo.util.Log;
 import com.zlyandroid.mvcdemo.util.StringUtil;
 
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -62,19 +74,18 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Activi
     private boolean isshowtitle = true;
     /***是否显示标题栏*/
     private boolean isshowstate = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // 初始化状态栏
+        initWindowTitle();
+        // 切换主题
+        switchTheme();
         setContentView(getLayoutID());
         context = (BaseActivity) getActivity();
         unbinder = ButterKnife.bind(this);
         isAlive = true;
-
         dialog = DialogUtils.createLoadingDialog(this, "请稍后...");
-        // 初始化状态栏
-        initWindowTitle();
 
         // 初始化控件
         initView();
@@ -82,7 +93,6 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Activi
         initData();
 
     }
-
     /**
      * 初始化状态栏
      */
@@ -96,6 +106,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Activi
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
     }
+
     /**
      * 是否设置标题栏
      *
@@ -112,6 +123,58 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Activi
      */
     public void setState(boolean ishow) {
         isshowstate = ishow;
+    }
+    /**
+     * 初始化标题栏
+     *
+     * @param isshowBack
+     * @param text
+     */
+    protected void initToolBar(boolean isshowBack, String text) {
+        View toolbar = findViewById(R.id.myToolBar);
+        if (toolbar != null) {
+            ((TextView) toolbar.findViewById(R.id.tv_toolbar_title)).setText(text);
+            if (isshowBack) {
+                findViewById(R.id.iv_toolbar_back).setOnClickListener(view -> finishActivity());
+            } else {
+                findViewById(R.id.iv_toolbar_back).setVisibility(View.GONE);
+            }
+        }
+    }
+
+    /**
+     * 添加标题栏组件
+     *
+     * @param resid
+     * @return
+     */
+    protected ImageView addToolbarMenu(int resid) {
+        View toolbar = findViewById(R.id.myToolBar);
+        if (toolbar != null) {
+            ImageView i = toolbar.findViewById(R.id.iv_toolbar_menu);
+            i.setImageResource(resid);
+            i.setVisibility(View.VISIBLE);
+            return i;
+        }
+        return null;
+    }
+
+    /**
+     * 添加标题栏组件
+     *
+     * @param v
+     */
+    protected void addToolbarView(View v) {
+        FrameLayout toolbar = findViewById(R.id.myToolBar);
+        if (toolbar != null) {
+            FrameLayout.LayoutParams pls = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            v.setLayoutParams(pls);
+            int padding = DimmenUtils.dip2px(this, 12);
+            v.setPadding(padding, padding, padding, padding);
+            pls.setMarginEnd(padding);
+            pls.gravity = Gravity.END;
+            toolbar.addView(v);
+        }
     }
 
 //底部滑动实现同点击标题栏左右按钮效果>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -245,7 +308,68 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Activi
     //运行线程 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
+    public void hideKeyBoard() {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+    /**
+     * 初始化滑动事件
+     */
+    public void initSlidr() {
+        SlidrConfig config = new SlidrConfig.Builder()
+                .position(SlidrPosition.LEFT)//滑动起始方向
+                .edge(true)
+                .edgeSize(0.18f)//距离左边界占屏幕大小的18%
+                .build();
+        Slidr.attach(this, config);
+    }
 
+    /**
+     * 中途 切换主题
+     */
+    public void switchTheme() {
+        //直接夜间 设置退出
+        int theme = ProApplication.getCustomTheme();
+        int cur = AppCompatDelegate.getDefaultNightMode();
+        int to = cur;
+        boolean autoChnage = false;
+
+        if (theme == ThemeActivity.THEME_NIGHT) {
+            //夜间主题
+            to = AppCompatDelegate.MODE_NIGHT_YES;
+        } else {
+            //白天主题
+            if (ProApplication.isAutoDarkMode()) {
+                autoChnage = true;
+                int[] time = ProApplication.getDarkModeTime();
+                int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+//                if ((hour >= time[0] || hour < time[1])) {
+                //自动切换
+//                    to = AppCompatDelegate.MODE_NIGHT_YES;
+//                    printLog("toNight");
+//                } else {
+                to = AppCompatDelegate.MODE_NIGHT_NO;
+//                }
+            } else {
+                to = AppCompatDelegate.MODE_NIGHT_NO;
+            }
+        }
+
+        if (to == AppCompatDelegate.MODE_NIGHT_YES) {
+            //夜间模式主题
+            setTheme(R.style.AppTheme);
+        } else {
+            setTheme(theme);
+        }
+
+        //黑白发生了变化
+        if (to != cur) {
+//            if (autoChnage) {
+//                showToast("自动" + (to == AppCompatDelegate.MODE_NIGHT_YES ?
+//                        "切换到夜间模式" : "关闭夜间模式"));
+//            }
+            AppCompatDelegate.setDefaultNightMode(to);
+        }
+    }
 
     @Override
     public final boolean isAlive() {
@@ -318,5 +442,8 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Activi
 
         Log.d(TAG, "onDestroy >>>>>>>>>>>>>>>>>>>>>>>>\n");
     }
-
+    public void finishActivity() {
+        finish();
+        overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
+    }
 }

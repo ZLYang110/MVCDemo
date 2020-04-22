@@ -89,6 +89,7 @@ public abstract class BaseFragment extends RxFragment implements FragmentPresent
         getActivity().overridePendingTransition(R.anim.translate_in,R.anim.translate_out);
     }
 
+
     public abstract void ScrollToTop();
 
 

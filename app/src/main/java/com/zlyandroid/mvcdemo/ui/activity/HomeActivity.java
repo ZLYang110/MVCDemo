@@ -16,7 +16,9 @@ import com.zlyandroid.mvcdemo.mvp.BasePresenter;
 import com.zlyandroid.mvcdemo.mvp.presenter.HomePresenter;
 import com.zlyandroid.mvcdemo.mvp.presenter.LoginPresenter;
 import com.zlyandroid.mvcdemo.mvp.view.HomeView;
+import com.zlyandroid.mvcdemo.ui.fragment.HomeFragment;
 import com.zlyandroid.mvcdemo.ui.fragment.MineFragment;
+import com.zlyandroid.mvcdemo.ui.fragment.Test2Fragment;
 import com.zlyandroid.mvcdemo.ui.fragment.TestFragment;
 import com.zlyandroid.mvcdemo.util.log.ZLog;
 import com.zlyandroid.mvcdemo.widget.MyBottomTab;
@@ -33,9 +35,9 @@ public class HomeActivity extends BaseMvpActivity implements ViewPager.OnPageCha
     private ViewPager viewPager;
     private List<BaseFragment> fragments = new ArrayList<>();
 
-    private static MineFragment mineFragment;
+    private static HomeFragment homeFragment;
     private static TestFragment testFragment;
-    private static MineFragment mineFragment3;
+    private static Test2Fragment test2Fragment;
     private static MineFragment mineFragment4;
 
     @Override
@@ -74,18 +76,34 @@ public class HomeActivity extends BaseMvpActivity implements ViewPager.OnPageCha
         viewPager = findViewById(R.id.view_pager);
         viewPager.setOffscreenPageLimit(4);
         viewPager.addOnPageChangeListener(this);
-        mineFragment = new MineFragment();
+        homeFragment = new HomeFragment();
         testFragment = new TestFragment();
-        mineFragment3 = new MineFragment();
+        test2Fragment = new Test2Fragment();
         mineFragment4 = new MineFragment();
-        fragments.add(mineFragment);
+        fragments.add(homeFragment);
         fragments.add(testFragment);
-        fragments.add(mineFragment3);
+        fragments.add(test2Fragment);
         fragments.add(mineFragment4);
         MainPageAdapter adapter = new MainPageAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(adapter);
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ZLog.d("HomeActivity onActivityResult resultCode" + resultCode);
+        if (resultCode == RESULT_OK) {
+            ZLog.d("resultCode == RESULT_OK  requestCode== "+requestCode );
+            switch (requestCode) {
+                case ThemeActivity.requestCode://32
+                    recreate();
+                    ZLog.d("onActivityResult ThemeActivity");
+                    break;
 
+            }
+        } else
+            ZLog.d("resultCode != RESULT_OK");
+        hideKeyBoard();
+    }
     @Override
     public void showLoading() {
 

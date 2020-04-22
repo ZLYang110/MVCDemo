@@ -1,7 +1,6 @@
 package com.zlyandroid.mvcdemo.mvp;
 
 
-import com.uber.autodispose.AutoDisposeConverter;
 
 /**
  * @author zhangliyang

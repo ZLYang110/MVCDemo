@@ -12,12 +12,15 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppTheme" parent="BaseTheme">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <!--切换activity时屏幕不变暗-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--窗口的背景设置成透明 ,这样的话在我们每个界面的根布局都要设置background,要不然就是透明的-->
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+
     <style name="AppTheme.normal" parent="BaseTheme">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
@@ -76,5 +79,76 @@
         <item name="android:windowContentOverlay">@null</item><!--内容覆盖 -->
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item><!-- 窗口样式Dialog -->
         <item name="android:backgroundDimEnabled">true</item><!--模糊-->
+    </style>
+
+
+    <style name="AppTheme.2">
+        <item name="colorPrimary">@color/main_color_2</item>
+        <item name="colorPrimaryDark">@color/main_color_2</item>
+        <item name="colorAccent">@color/main_color_2</item>
+        <item name="android:statusBarColor">@color/main_color_2</item>
+    </style>
+
+    <style name="AppTheme.3">
+        <item name="colorPrimary">@color/main_color_3</item>
+        <item name="colorPrimaryDark">@color/main_color_3</item>
+        <item name="colorAccent">@color/main_color_3</item>
+        <item name="android:statusBarColor">@color/main_color_3</item>
+    </style>
+
+    <style name="AppTheme.4">
+        <item name="colorPrimary">@color/main_color_4</item>
+        <item name="colorPrimaryDark">@color/main_color_4</item>
+        <item name="colorAccent">@color/main_color_4</item>
+        <item name="android:statusBarColor">@color/main_color_4</item>
+    </style>
+
+    <style name="AppTheme.5">
+        <item name="colorPrimary">@color/main_color_5</item>
+        <item name="colorPrimaryDark">@color/main_color_5</item>
+        <item name="colorAccent">@color/main_color_5</item>
+        <item name="android:statusBarColor">@color/main_color_5</item>
+    </style>
+
+    <style name="AppTheme.6">
+        <item name="colorPrimary">@color/main_color_6</item>
+        <item name="colorPrimaryDark">@color/main_color_6</item>
+        <item name="colorAccent">@color/main_color_6</item>
+        <item name="android:statusBarColor">@color/main_color_6</item>
+    </style>
+
+    <style name="AppTheme.7">
+        <item name="colorPrimary">@color/main_color_7</item>
+        <item name="colorPrimaryDark">@color/main_color_7</item>
+        <item name="colorAccent">@color/main_color_7</item>
+        <item name="android:statusBarColor">@color/main_color_7</item>
+    </style>
+
+    <style name="AppTheme.8">
+        <item name="colorPrimary">@color/main_color_8</item>
+        <item name="colorPrimaryDark">@color/main_color_8</item>
+        <item name="colorAccent">@color/main_color_8</item>
+        <item name="android:statusBarColor">@color/main_color_8</item>
+    </style>
+
+    <style name="AppTheme.9">
+        <item name="colorPrimary">@color/main_color_9</item>
+        <item name="colorPrimaryDark">@color/main_color_9</item>
+        <item name="colorAccent">@color/main_color_9</item>
+        <item name="android:statusBarColor">@color/main_color_9</item>
+    </style>
+
+    <style name="AppTheme.10">
+        <item name="colorPrimary">@color/main_color_10</item>
+        <item name="colorPrimaryDark">@color/main_color_10</item>
+        <item name="colorAccent">@color/main_color_10</item>
+        <item name="android:statusBarColor">@color/main_color_10</item>
+    </style>
+
+    <style name="AppTheme.11">
+        <item name="colorPrimary">@color/main_color_11</item>
+        <item name="colorPrimaryDark">@color/main_color_11</item>
+        <item name="colorAccent">@color/main_color_11</item>
+        <item name="android:statusBarColor">@color/main_color_11</item>
     </style>
 </resources>

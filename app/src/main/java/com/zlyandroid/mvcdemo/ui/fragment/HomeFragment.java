@@ -26,7 +26,7 @@ public class HomeFragment extends BaseMvpFragment<MinePresenter> implements Mine
     }
     @Override
     public int getLayoutID() {
-        return R.layout.fragment_test;
+        return R.layout.fragment_home;
     }
 
     @Override

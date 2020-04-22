@@ -2,7 +2,6 @@ package com.zlyandroid.mvcdemo.mvp;
 
 
 import com.trello.rxlifecycle3.LifecycleTransformer;
-import com.uber.autodispose.AutoDisposeConverter;
 
 /**
  * @author zhangliyang
