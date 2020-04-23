@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.zlyandroid.mvcdemo.R;
 import com.zlyandroid.mvcdemo.app.ProApplication;
 import com.zlyandroid.mvcdemo.base.BaseActivity;
+import com.zlyandroid.mvcdemo.util.ThemeUtil;
 import com.zlyandroid.mvcdemo.util.ToastUtils;
 import com.zlyandroid.mvcdemo.util.log.ZLog;
 import com.zlyandroid.mvcdemo.widget.MyCircleView;
@@ -109,7 +110,7 @@ public class ThemeActivity extends BaseActivity implements AdapterView.OnItemCli
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(this);
 
-        currentTheme = ProApplication.getCustomTheme();
+        currentTheme = ThemeUtil.getCustomTheme();
         currentSelect = getSelect();
 
         if (currentSelect == THEME_NIGHT) {
@@ -118,8 +119,8 @@ public class ThemeActivity extends BaseActivity implements AdapterView.OnItemCli
             nightViews.setVisibility(View.VISIBLE);
         }
 
-        tvThemeStartTimeText.setText(ProApplication.getDarkModeTime()[0] + ":00");
-        tvThemeEndTimeText.setText(ProApplication.getDarkModeTime()[1] + ":00");
+        tvThemeStartTimeText.setText(ThemeUtil.getDarkModeTime()[0] + ":00");
+        tvThemeEndTimeText.setText(ThemeUtil.getDarkModeTime()[1] + ":00");
 
 //        auto.setOnCheckedChangeListener((buttonView, isChecked) -> {
 //            App.setAutoDarkMode(this, isChecked);
@@ -128,17 +129,17 @@ public class ThemeActivity extends BaseActivity implements AdapterView.OnItemCli
         startView.setOnClickListener(v -> {
             new TimePickerDialog(this, (view, hourOfDay, minute) -> {
                 tvThemeStartTimeText.setText(hourOfDay + ":00");
-                ProApplication.setDarkModeTime( true, hourOfDay);
+                ThemeUtil.setDarkModeTime( true, hourOfDay);
                 Log.d("==", hourOfDay + "");
-            }, ProApplication.getDarkModeTime()[0], 0, true).show();
+            }, ThemeUtil.getDarkModeTime()[0], 0, true).show();
         });
 
         endView.setOnClickListener(v -> {
             new TimePickerDialog(this, (view, hourOfDay, minute) -> {
                 tvThemeEndTimeText.setText(hourOfDay + ":00");
                 Log.d("==", hourOfDay + "");
-                ProApplication.setDarkModeTime(false, hourOfDay);
-            }, ProApplication.getDarkModeTime()[1], 0, true).show();
+                ThemeUtil.setDarkModeTime(false, hourOfDay);
+            }, ThemeUtil.getDarkModeTime()[1], 0, true).show();
         });
     }
 
@@ -151,8 +152,8 @@ public class ThemeActivity extends BaseActivity implements AdapterView.OnItemCli
         int to = curr;
 
         // 选择的主题与之前的主题不同
-        if (ProApplication.getCustomTheme() != themeIds[currentSelect]) {
-            ProApplication.setCustomTheme(themeIds[currentSelect]);
+        if (ThemeUtil.getCustomTheme() != themeIds[currentSelect]) {
+            ThemeUtil.setCustomTheme(themeIds[currentSelect]);
             isChange = true;
             if (themeIds[currentSelect] == THEME_NIGHT) {
                 // 选择的是夜间模式
